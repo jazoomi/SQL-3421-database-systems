@@ -1,0 +1,39 @@
+#1a
+SELECT professor.pnum, professor.lastname
+FROM professor
+JOIN section ON professor.pnum = section.pnum
+JOIN enrollment ON section.cnum = enrollment.cnum
+				AND section.term = enrollment.term
+                AND section.section = enrollment.section
+WHERE professor.dept LIKE 'CS'
+	AND section.cnum LIKE 'CS348'
+    AND enrollment.grade < 60;
+    
+    
+    Sigma
+    
+    
+    
+    #1b
+    SELECT professor.pnum, professor.lastname
+FROM professor
+JOIN section ON professor.pnum = section.pnum
+JOIN enrollment ON section.cnum = enrollment.cnum
+				AND section.term = enrollment.term
+                AND section.section = enrollment.section
+WHERE professor.dept LIKE 'CS'
+	AND NOT (section.cnum LIKE 'CS348' OR section.cnum LIKE 'CS234');
+
+#1c
+SELECT s.snum, s.firstname, s.year
+FROM student s
+WHERE s.year = 4
+  AND NOT EXISTS (
+    SELECT 1
+    FROM enrollment e
+    JOIN section sec ON e.cnum = sec.cnum AND e.term = sec.term AND e.section = sec.section
+    JOIN course c ON e.cnum = c.cnum
+    WHERE s.snum = e.snum
+      AND c.cnum LIKE 'C%'
+      AND (e.grade IS NULL OR e.grade < 90)
+  );

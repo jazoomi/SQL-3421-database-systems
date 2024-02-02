@@ -1,0 +1,23 @@
+    
+    #3a
+SELECT professor.pnum, professor.lastname
+FROM professor
+JOIN section ON professor.pnum = section.pnum
+JOIN enrollment ON section.cnum = enrollment.cnum
+               AND section.term = enrollment.term
+               AND section.section = enrollment.section
+WHERE section.cnum = 'CS245'
+AND enrollment.grade = (
+    SELECT MIN(grade)
+    FROM enrollment
+    WHERE cnum = 'CS245'
+  );
+
+#3b
+SELECT COUNT(DISTINCT professor.pnum) * 100.0 / COUNT(DISTINCT professor.pnum) AS percentage
+FROM professor 
+JOIN section s1 ON professor.pnum = s1.pnum
+JOIN section s2 ON professor.pnum = s2.pnum
+WHERE s1.cnum = s2.cnum
+  AND s1.term = s2.term
+  AND s1.section <> s2.section;
